@@ -5,6 +5,7 @@ package io.github.guilhermeewe.libraryapi.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Table(name = "tb_author", schema = "public")
 @Getter
 @Setter
+@ToString
 public class Author {
 
     @Id
@@ -21,7 +23,7 @@ public class Author {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "name", length = 100, nullable = false)
+    @Column(name = "nome", length = 100, nullable = false)
     private String name;
 
     @Column(name = "data_nascimento", nullable = false)
@@ -31,6 +33,7 @@ public class Author {
     private String nacionalidade;
 
 
-    @OneToMany(mappedBy = "author")
+    // @OneToMany(mappedBy = "author")
+    @Transient
     private List<Livro> livrosList;
 }
