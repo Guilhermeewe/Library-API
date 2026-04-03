@@ -41,7 +41,7 @@ public class AuthorRepositoryTest {
             System.out.println("Dados do autor: \n");
             System.out.println(author);
 
-            author.setDate(LocalDate.of(2022, 1, 10));
+            author.setDate(LocalDate.of(2024, 1, 10));
 
             authorRepository.save(author);
         }
