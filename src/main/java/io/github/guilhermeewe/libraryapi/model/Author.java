@@ -34,6 +34,5 @@ public class Author {
 
 
     @OneToMany(mappedBy = "author")
-    @Transient
     private List<Livro> livrosList;
 }

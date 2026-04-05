@@ -1,11 +1,15 @@
 package io.github.guilhermeewe.libraryapi.repository;
 
 import io.github.guilhermeewe.libraryapi.model.Author;
+import io.github.guilhermeewe.libraryapi.model.GeneroLivro;
+import io.github.guilhermeewe.libraryapi.model.Livro;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,6 +19,9 @@ public class AuthorRepositoryTest {
 
     @Autowired
     AuthorRepository authorRepository;
+
+    @Autowired
+    LivroRepository livroRepository;
 
     @Test
     public void salvarTest(){
@@ -69,5 +76,31 @@ public class AuthorRepositoryTest {
         authorRepository.deleteById(id);
 
         listarTest();
+    }
+
+    @Test
+    void atualizarAuthorLivro(){
+        Author author = new Author();
+
+        author.setName("Marta S");
+        author.setNacionalidade("Brazil");
+        author.setDate(LocalDate.of(1999, 12, 12));
+
+
+        Livro livro = new Livro();
+        livro.setIsbn("9832983901312");
+        livro.setPreco(BigDecimal.valueOf(100));
+        livro.setGenero(GeneroLivro.BIOGRAFIA);
+        livro.setTittle("Pão Receita");
+        livro.setDataPublicacao(LocalDate.of(2022, 12, 2));
+        livro.setAuthor(author);
+
+        author.setLivrosList(new ArrayList<>());
+        author.getLivrosList().add(livro);
+
+        authorRepository.save(author);
+
+        livroRepository.saveAll(author.getLivrosList());
+
     }
 }
