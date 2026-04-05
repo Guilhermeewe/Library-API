@@ -40,10 +40,13 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "titulo", length = 150, nullable = false)
+    private String tittle;
+
     @Column(name = "isbn", length = 50, nullable = false)
     private String isbn;
 
-    @Column(name = "data_nascimento", nullable = false)
+    @Column(name = "data_publicacao", nullable = false)
     private LocalDate dataPublicacao;
 
     @Enumerated(EnumType.STRING)
@@ -53,8 +56,8 @@ public class Livro {
     @Column(name = "preco", precision = 18, scale = 2, nullable = false)
     private BigDecimal preco;
 
-    @ManyToOne
-    @JoinColumn(name = "id_autor")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_author")
     private Author author;
 
 

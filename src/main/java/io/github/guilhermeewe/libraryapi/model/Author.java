@@ -33,7 +33,7 @@ public class Author {
     private String nacionalidade;
 
 
-    // @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author")
     @Transient
     private List<Livro> livrosList;
 }
