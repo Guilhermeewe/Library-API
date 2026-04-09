@@ -104,4 +104,16 @@ public class AuthorRepositoryTest {
 
     }
 
+
+    @Test
+    void listarLivrosAutor(){
+        UUID id = UUID.fromString("f65e6df5-df70-436b-9d96-102861deaad6");
+        var author = authorRepository.findById(id).get();
+
+        List<Livro> livroList = livroRepository.findByAuthor(author);
+        author.setLivrosList(livroList);
+
+        author.getLivrosList().forEach(System.out::println);
+    }
+
 }

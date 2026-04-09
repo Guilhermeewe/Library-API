@@ -7,9 +7,11 @@ import io.github.guilhermeewe.libraryapi.model.Livro;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
@@ -75,6 +77,14 @@ public class LivroRepositoryTest {
 
         livroRepository.save(livroAtualizar);
 
+    }
+
+    @Test
+    void pesquisaPorTitulo(){
+        List<Livro> paoReceita = livroRepository.findByTittle("UFO");
+        for (Livro livro : paoReceita) {
+            System.out.println(livro);
+        }
     }
 
 }
