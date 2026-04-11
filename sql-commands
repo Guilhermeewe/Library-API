@@ -2,7 +2,10 @@ CREATE TABLE tb_author (
     ID uuid NOT NULL PRIMARY KEY,
     nome varchar(100) not null,
     data_nascimento date not null,
-    nacionalidade varchar(50) not null
+    nacionalidade varchar(50) not null,
+    data_cadastro timestamp,
+    data_atualizacao timestamp,
+    id_usuario uuid not null
 );
 
 CREATE TABLE tb_livro (
@@ -13,6 +16,9 @@ CREATE TABLE tb_livro (
 	data_publicacao date not null,
 	genero varchar(30) not null,
 	preco numeric(18, 2),
+    data_cadastro timestamp,
+    data_atualizacao timestamp,
+    id_usuario uuid not null
 
 	id_author uuid not null references tb_author(id)
 
