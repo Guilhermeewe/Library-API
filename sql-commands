@@ -19,3 +19,5 @@ CREATE TABLE tb_livro (
 	constraint chk_genero check (genero in ('FICCAO', 'FANTASIA', 'MISTERIO', 'ROMANCE', 'BIOGRAFIA', 'CIENCIA'))
 
 );
+
+
