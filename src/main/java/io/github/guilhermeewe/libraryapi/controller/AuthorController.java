@@ -5,6 +5,7 @@ import io.github.guilhermeewe.libraryapi.controller.dto.ErroResposta;
 import io.github.guilhermeewe.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.guilhermeewe.libraryapi.model.Author;
 import io.github.guilhermeewe.libraryapi.service.AuthorService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/autores")
-//htp://localhost:8080/autores
+//http://localhost:8080/autores
 public class AuthorController {
 
+    @GetMapping("ping")
+    public String pong(){
+        return "pong";
+    }
 
     private final AuthorService authorService;
 
@@ -29,7 +34,7 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody AuthorDTO author) {
+    public ResponseEntity<Object> salvar(@RequestBody @Valid AuthorDTO author) {
         try {
 
         Author authorEntity = author.mapearParaAuthor();
@@ -44,6 +49,7 @@ public class AuthorController {
 
 
         return ResponseEntity.created(locationURL).build();
+
         } catch (RegistroDuplicadoException e){
 
             var erroDTO = ErroResposta.conflito(e.getMessage());
