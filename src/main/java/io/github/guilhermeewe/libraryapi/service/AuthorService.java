@@ -5,6 +5,11 @@ import io.github.guilhermeewe.libraryapi.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.desktop.AboutHandler;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class AuthorService {
 
@@ -15,7 +20,31 @@ public class AuthorService {
     }
 
     public Author salvarAuthor(Author author) {
-        return  authorRepository.save(author);
+        return authorRepository.save(author);
     }
 
+    public Optional<Author> obterAuthorPorId(UUID id) {
+        return authorRepository.findById(id);
+    }
+
+    public void deletarPorId(Author author) {
+        authorRepository.delete(author);
+    }
+
+    public List<Author> listarAutores(String nome, String nacionalidade){
+        if (nome != null && nacionalidade != null) {
+            return authorRepository.findByNomeAndNacionalidade(nome, nacionalidade);
+        }
+
+        if (nome != null ) {
+            return authorRepository.findByNome(nome);
+        }
+
+        if(nacionalidade != null) {
+            return authorRepository.findByNacionalidade(nacionalidade);
+        }
+
+        return authorRepository.findAll();
+
+    }
 }
