@@ -1,8 +1,12 @@
 package io.github.guilhermeewe.libraryapi.controller;
 
 import io.github.guilhermeewe.libraryapi.controller.dto.AuthorDTO;
+import io.github.guilhermeewe.libraryapi.controller.dto.ErroResposta;
+import io.github.guilhermeewe.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.guilhermeewe.libraryapi.model.Author;
 import io.github.guilhermeewe.libraryapi.service.AuthorService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,7 +29,8 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody AuthorDTO author) {
+    public ResponseEntity<Object> salvar(@RequestBody AuthorDTO author) {
+        try {
 
         Author authorEntity = author.mapearParaAuthor();
 
@@ -37,7 +42,14 @@ public class AuthorController {
                 .buildAndExpand(authorEntity.getId())
                 .toUri();
 
+
         return ResponseEntity.created(locationURL).build();
+        } catch (RegistroDuplicadoException e){
+
+            var erroDTO = ErroResposta.conflito(e.getMessage());
+
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        }
 
     }
 
@@ -118,6 +130,11 @@ public class AuthorController {
         var authorEntity = author.get();
 
         authorEntity.setName(dto.nome());
+        authorEntity.setNacionalidade(dto.nacionalidade());
+        authorEntity.setDate(dto.dataNascimento());
 
+        authorService.atualizar(authorEntity);
+
+        return ResponseEntity.noContent().build();
     }
 }
