@@ -6,8 +6,6 @@ import io.github.guilhermeewe.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.guilhermeewe.libraryapi.model.Author;
 import io.github.guilhermeewe.libraryapi.service.AuthorService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

@@ -4,6 +4,8 @@ import io.github.guilhermeewe.libraryapi.model.Author;
 import io.github.guilhermeewe.libraryapi.repository.AuthorRepository;
 import io.github.guilhermeewe.libraryapi.validator.AuthorValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.awt.desktop.AboutHandler;
@@ -57,4 +59,24 @@ public class AuthorService {
         return authorRepository.findAll();
 
     }
+
+    public List<Author> pesquisaByExample(String nome, String nacionalidade) {
+        Author author = new Author();
+
+        author.setName(nome);
+        author.setNacionalidade(nacionalidade);
+
+        ExampleMatcher exampleMatcher = ExampleMatcher
+                .matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<Author> authorExample = Example.of(author, exampleMatcher);
+
+        return  authorRepository.findAll(authorExample);
+
+
+    }
+
 }
