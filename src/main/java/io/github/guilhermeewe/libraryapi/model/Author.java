@@ -1,11 +1,8 @@
 package io.github.guilhermeewe.libraryapi.model;
 
 
-
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,9 +15,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(AuditingEntityListener.class) //Annotations de auditoria
 @Table(name = "tb_author", schema = "public")
-@Getter
-@Setter
-@ToString
+@Data
 public class Author {
 
     @Id
@@ -29,10 +24,10 @@ public class Author {
     private UUID id;
 
     @Column(name = "nome", length = 100, nullable = false)
-    private String name;
+    private String nome;
 
     @Column(name = "data_nascimento", nullable = false)
-    private LocalDate date;
+    private LocalDate dataNascimento;
 
     @Column(name = "nacionalidade", length = 50, nullable = false)
     private String nacionalidade;

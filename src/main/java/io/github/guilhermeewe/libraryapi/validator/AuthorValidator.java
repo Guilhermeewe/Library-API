@@ -24,9 +24,9 @@ public class AuthorValidator {
 
     private boolean existeAuthorCadastrado(Author author) {
         Optional<Author> authorOptional = authorRepository
-                .findByNameAndDateAndNacionalidade(
-                    author.getName(),
-                    author.getDate(),
+                .findByNomeAndDataNascimentoAndNacionalidade(
+                    author.getNome(),
+                    author.getDataNascimento(),
                     author.getNacionalidade());
 
         if (author.getId() == null) {

@@ -2,6 +2,7 @@ package io.github.guilhermeewe.libraryapi.controller;
 
 import io.github.guilhermeewe.libraryapi.controller.dto.AuthorDTO;
 import io.github.guilhermeewe.libraryapi.controller.dto.ErroResposta;
+import io.github.guilhermeewe.libraryapi.controller.mappers.AuthorMapper;
 import io.github.guilhermeewe.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.guilhermeewe.libraryapi.model.Author;
 import io.github.guilhermeewe.libraryapi.service.AuthorService;
@@ -18,42 +19,21 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/autores")
 //http://localhost:8080/autores
-public class AuthorController {
-
-    @GetMapping("ping")
-    public String pong(){
-        return "pong";
-    }
-
+public class AuthorController implements GenericController {
     private final AuthorService authorService;
+    private final AuthorMapper authorMapper;
 
-    public AuthorController(AuthorService authorService){
+    public AuthorController(AuthorService authorService, AuthorMapper authorMapper){
         this.authorService = authorService;
+        this.authorMapper = authorMapper;
     }
 
     @PostMapping
     public ResponseEntity<Object> salvar(@RequestBody @Valid AuthorDTO author) {
-        try {
-
-        Author authorEntity = author.mapearParaAuthor();
-
+        Author authorEntity = authorMapper.toEntity(author);
         authorService.salvarAuthor(authorEntity);
-
-        URI locationURL = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(authorEntity.getId())
-                .toUri();
-
-
+        URI locationURL = gerarHeaderLocation(authorEntity.getId());
         return ResponseEntity.created(locationURL).build();
-
-        } catch (RegistroDuplicadoException e){
-
-            var erroDTO = ErroResposta.conflito(e.getMessage());
-
-            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
-        }
 
     }
 
@@ -62,24 +42,12 @@ public class AuthorController {
 
         var idAuthor = UUID.fromString(id);
 
-        Optional<Author> authorOptional = authorService.obterAuthorPorId(idAuthor);
-
-        if (authorOptional.isPresent()) {
-
-            Author author = authorOptional.get();
-            AuthorDTO authorDTO = new AuthorDTO(
-                    author.getId(),
-                    author.getName(),
-                    author.getDate(),
-                    author.getNacionalidade()
-                    );
-            return ResponseEntity.ok(authorDTO);
-
-
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-
+        return authorService.obterAuthorPorId(idAuthor)
+                .map(author -> {
+                    AuthorDTO authorDTO = authorMapper.toDTO(author);
+                    return ResponseEntity.ok(authorDTO);
+                })
+                .orElseGet( () -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("{id}")
@@ -103,18 +71,13 @@ public class AuthorController {
     @GetMapping
     public ResponseEntity<List<AuthorDTO>> buscarAutores(
             @RequestParam(value = "nome", required = false) String nome,
-            @RequestParam(value = "nome", required = false) String nacionalidade
+            @RequestParam(value = "nacionalidade", required = false) String nacionalidade
     ) {
         List<Author> authors = authorService.listarAutores(nome, nacionalidade);
 
         List<AuthorDTO> authorDTOS = authors
                 .stream()
-                .map(author -> new AuthorDTO(
-                        author.getId(),
-                        author.getName(),
-                        author.getDate(),
-                        author.getNacionalidade()
-                )).toList();
+                .map(authorMapper::toDTO).toList();
 
         return ResponseEntity.ok(authorDTOS);
     }
@@ -133,9 +96,9 @@ public class AuthorController {
 
         var authorEntity = author.get();
 
-        authorEntity.setName(dto.nome());
+        authorEntity.setNome(dto.nome());
         authorEntity.setNacionalidade(dto.nacionalidade());
-        authorEntity.setDate(dto.dataNascimento());
+        authorEntity.setDataNascimento(dto.dataNascimento());
 
         authorService.atualizar(authorEntity);
 

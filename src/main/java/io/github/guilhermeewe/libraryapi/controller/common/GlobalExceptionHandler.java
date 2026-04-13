@@ -2,10 +2,12 @@ package io.github.guilhermeewe.libraryapi.controller.common;
 
 import io.github.guilhermeewe.libraryapi.controller.dto.ErroCampo;
 import io.github.guilhermeewe.libraryapi.controller.dto.ErroResposta;
+import io.github.guilhermeewe.libraryapi.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
@@ -30,4 +32,11 @@ public class GlobalExceptionHandler {
                 "Erro de validação",
                 listErros);
     }
+
+    @ExceptionHandler(RegistroDuplicadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleRegistroDuplicadoException(RegistroDuplicadoException e ) {
+        return ErroResposta.conflito(e.getMessage());
+    }
+
 }

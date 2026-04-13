@@ -45,11 +45,11 @@ public class AuthorService {
 
     public List<Author> listarAutores(String nome, String nacionalidade){
         if (nome != null && nacionalidade != null) {
-            return authorRepository.findByNameAndNacionalidade(nome, nacionalidade);
+            return authorRepository.findByNomeAndNacionalidade(nome, nacionalidade);
         }
 
         if (nome != null ) {
-            return authorRepository.findByName(nome);
+            return authorRepository.findByNome(nome);
         }
 
         if(nacionalidade != null) {
@@ -63,7 +63,7 @@ public class AuthorService {
     public List<Author> pesquisaByExample(String nome, String nacionalidade) {
         Author author = new Author();
 
-        author.setName(nome);
+        author.setNome(nome);
         author.setNacionalidade(nacionalidade);
 
         ExampleMatcher exampleMatcher = ExampleMatcher

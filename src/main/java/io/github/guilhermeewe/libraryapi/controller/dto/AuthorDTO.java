@@ -22,13 +22,4 @@ public record AuthorDTO(
         String nacionalidade
 ) {
 
-    public Author mapearParaAuthor() {
-        Author author = new Author();
-
-        author.setName(this.nome);
-        author.setDate(this.dataNascimento);
-        author.setNacionalidade(this.nacionalidade);
-
-        return author;
-    }
 }

@@ -27,9 +27,9 @@ public class AuthorRepositoryTest {
     public void salvarTest(){
         Author author = new Author();
 
-        author.setName("Maria");
+        author.setNome("Maria");
         author.setNacionalidade("Brazil");
-        author.setDate(LocalDate.of(2023, 12, 12));
+        author.setDataNascimento(LocalDate.of(2023, 12, 12));
 
         var authorId
                 = authorRepository.save(author);
@@ -48,7 +48,7 @@ public class AuthorRepositoryTest {
             System.out.println("Dados do autor: \n");
             System.out.println(author);
 
-            author.setDate(LocalDate.of(2024, 1, 10));
+            author.setDataNascimento(LocalDate.of(2024, 1, 10));
 
             authorRepository.save(author);
         }
@@ -82,9 +82,9 @@ public class AuthorRepositoryTest {
     void atualizarAuthorLivro(){
         Author author = new Author();
 
-        author.setName("Marta S");
+        author.setNome("Marta S");
         author.setNacionalidade("Brazil");
-        author.setDate(LocalDate.of(1999, 12, 12));
+        author.setDataNascimento(LocalDate.of(1999, 12, 12));
 
 
         Livro livro = new Livro();
