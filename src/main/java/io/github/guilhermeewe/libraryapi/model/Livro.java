@@ -3,14 +3,16 @@ package io.github.guilhermeewe.libraryapi.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-
 /*
-
 CREATE TABLE tb_livro (
 
 	id uuid not null primary key,
@@ -19,6 +21,9 @@ CREATE TABLE tb_livro (
 	data_publicacao date not null,
 	genero varchar(30) not null,
 	preco numeric(18, 2),
+    data_cadastro timestamp,
+    data_atualizacao timestamp,
+    id_usuario uuid not null
 
 	id_author uuid not null references tb_author(id)
 
@@ -26,13 +31,13 @@ CREATE TABLE tb_livro (
 
 );
 
-
  */
 
 
 @Entity
 @Data // -> @Data engloba um monte de outras annotations (Getter, Setters, Equal and HashCode)
 @Table(name = "tb_livro", schema = "public")
+@EntityListeners(AuditingEntityListener.class)
 public class Livro {
 
     @Column(name = "id")
@@ -56,6 +61,17 @@ public class Livro {
     @Column(name = "preco", precision = 18, scale = 2, nullable = false)
     private BigDecimal preco;
 
+    @Column(name = "data_cadastro")
+    @CreatedDate
+    private LocalDateTime dataCadastro;
+
+    @Column(name = "data_atualizacao")
+    @LastModifiedDate
+    private LocalDateTime dataAtualizacao;
+
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
+
     @ManyToOne(
             fetch = FetchType.LAZY
     )
@@ -64,3 +80,13 @@ public class Livro {
 
 
 }
+
+/*
+
+  data_cadastro timestamp,
+    data_atualizacao timestamp,
+    id_usuario uuid not null
+
+	id_author uuid not null references tb_author(id)
+
+ */
